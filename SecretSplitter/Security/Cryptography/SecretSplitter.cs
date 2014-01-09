@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Security;
-using System.Security.Cryptography;
 
 namespace Moserware.Security.Cryptography {
     public static class SecretSplitter {
@@ -70,11 +69,9 @@ namespace Moserware.Security.Cryptography {
         }
 
         private static IEnumerable<FiniteFieldPolynomial> GetRandomPolynomials(IrreduciblePolynomial irreduciblePolynomial, int total) {
-            var rng = RandomNumberGenerator.Create();
-
             for (int i = 0; i < total; i++) {
                 var randomCoefficientBytes = new byte[irreduciblePolynomial.SizeInBytes];
-                rng.GetBytes(randomCoefficientBytes);
+                RandomNumberHelper.GetBytes(randomCoefficientBytes);
                 yield return new FiniteFieldPolynomial(irreduciblePolynomial, randomCoefficientBytes.ToBigIntegerFromLittleEndianUnsignedBytes());
             }
         }
@@ -113,19 +110,33 @@ namespace Moserware.Security.Cryptography {
             get { return _AllCoefficients; }
         }
 
-        public Stream Encrypt(Stream inputStream, string fileName) {
+        public Stream Encrypt(Stream inputStream, string fileName)
+        {
+#if NETFX_CORE || SILVERLIGHT
+            throw new NotImplementedException("Not yet implemented for Windows Phone and WinRT");
+#else
             return Encrypt(inputStream, fileName, DateTime.UtcNow);
+#endif
         }
 
-        public Stream Encrypt(Stream inputStream, string fileName, DateTime fileDateTime) {
+        public Stream Encrypt(Stream inputStream, string fileName, DateTime fileDateTime)
+        {
+#if NETFX_CORE || SILVERLIGHT
+            throw new NotImplementedException("Not yet implemented for Windows Phone and WinRT");
+#else
             if((_ShareType != SecretShareType.File) || (_PassPhrase == null)) {
                 throw new InvalidOperationException("Cannot encrypt file unless share is file type");
             }
 
             return OpenPgp.EncryptSingleFile(_PassPhrase, inputStream, fileName, fileDateTime);
+#endif
         }
 
-        public void EncryptFile(string plaintextInputPath, string encryptedOutputPath) {
+        public void EncryptFile(string plaintextInputPath, string encryptedOutputPath)
+        {
+#if NETFX_CORE || SILVERLIGHT
+            throw new NotImplementedException("Not yet implemented for Windows Phone and WinRT");
+#else
             if (File.Exists(encryptedOutputPath)) {
                 File.Delete(encryptedOutputPath);
             }
@@ -136,6 +147,7 @@ namespace Moserware.Security.Cryptography {
                 var encryptedMemoryStream = Encrypt(plaintextStream, Path.GetFileName(plaintextInputPath), lastWriteDate);
                 encryptedMemoryStream.CopyTo(encryptedOutputStream);
             }
+#endif
         }
     }
 

@@ -40,6 +40,12 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SecretSplitter\Security\Cryptography\CryptoHashHelper.cs">
+      <Link>CryptoHashHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\SecretSplitter\Security\Cryptography\RandomNumberHelper.cs">
+      <Link>RandomNumberHelper.cs</Link>
+    </Compile>
     <Compile Include="Arguments.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

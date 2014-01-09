@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using Moserware.Algebra;
@@ -117,7 +116,7 @@ namespace Moserware.Security.Cryptography {
         // In case you're wondering, I use SHA-1 here instead of something like SHA-256 because it's just a simple checksum
         // where only the first byte is used. SHA-1 utilities are much more available than SHA-256 ones.
         public static string ComputeChecksum(byte[] bytes) {
-            return String.Join("", new SHA1Managed().ComputeHash(bytes).Take(ChecksumSizeInBytes).Select(b => b.ToString("x2")));
+            return String.Join("", CryptoHashHelper.ComputeSHA1Hash(bytes).Take(ChecksumSizeInBytes).Select(b => b.ToString("x2")));
         }
     }
 }

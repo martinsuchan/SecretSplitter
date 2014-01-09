@@ -11,7 +11,7 @@ namespace Moserware.Security.Cryptography {
         }
         
         public static string DecodeString(byte[] bytes) {
-            return Encoding.UTF8.GetString(bytes);
+            return Encoding.UTF8.GetString(bytes, 0, bytes.Length);
         }
 
         public static bool TryParseHexString(string s, out byte[] encodedBytes) {

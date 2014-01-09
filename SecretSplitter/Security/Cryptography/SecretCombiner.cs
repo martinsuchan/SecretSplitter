@@ -77,8 +77,12 @@ namespace Moserware.Security.Cryptography {
             get { return RecoveredBytes.ToHexString(); }
         }
 
-        public Stream Decrypt(Stream inputStream, out string originalFileName, out DateTime originalDateTime) {
-            if(ShareType != SecretShareType.File) {
+        public Stream Decrypt(Stream inputStream, out string originalFileName, out DateTime originalDateTime)
+        {
+#if NETFX_CORE || SILVERLIGHT
+            throw new NotImplementedException("Not yet implemented for Windows Phone and WinRT");
+#else
+            if (ShareType != SecretShareType.File) {
                 throw new InvalidOperationException("Secret must be of the File type to decrypt file");
             }
 
@@ -89,6 +93,7 @@ namespace Moserware.Security.Cryptography {
             }
 
             return OpenPgp.DecryptSingleFile(inputStream, passPhrase, out originalFileName, out originalDateTime);
+#endif
         }
     }
 }
